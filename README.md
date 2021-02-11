@@ -29,9 +29,16 @@ This is an exercise to practice enumerables methods in Ruby.
 ## Authors
 
 #### Camilo Patino
+
+<img width="100" alt="Miguel Gomez Profile Picture" src="https://avatars.githubusercontent.com/u/63986098?s=460&u=ff8772cc88c1864717a2be2fecb62eeae2c15899&v=4">
+
 * GitHub: [LoxiasCam](https://github.com/LoxiasCam)
 
 ### Miguel Gomez
+
+<img width="100" alt="Miguel Gomez Profile Picture" src="https://avatars.githubusercontent.com/u/50305489?s=400&u=2d451ca03611a85431ac4e851ab7a4fc3425bb7d&v=4">
+
+
 * GitHub: [@MiguelArgentina](https://github.com/MiguelArgentina)
 * twitter - https://twitter.com/Qete_arg
 
