@@ -1,4 +1,4 @@
-# enumerables
+# Enumerables
 
 This is an exercise to practice enumerables methods in Ruby.
 
