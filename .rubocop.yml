@@ -1,3 +1,4 @@
+# rubocop:disable Style/CaseEquality, Style/StringLiterals, Style/For
 AllCops:
   Exclude:
     - "Guardfile"
