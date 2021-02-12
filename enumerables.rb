@@ -1,5 +1,7 @@
-# rubocop: disable Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity
+# frozen_string_literal: true
 
+# rubocop: disable Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity
+# Enumerable Methods
 module Enumerable
   def my_each
     return to_a.to_enum unless block_given?
@@ -14,7 +16,7 @@ module Enumerable
     return to_enum(:my_each_with_index) unless block_given?
 
     if block_given?
-      0.upto(arr.length - 1) do |i|
+      0.upto(length - 1) do |i|
         yield(to_a[i], i)
       end
     end
@@ -98,33 +100,27 @@ module Enumerable
   end
 
   def my_inject(*args)
-    memo = 0
-    sym = nil
-    if block_given?
-      return nil if args.length > 1
-      
-      memo = to_a[0] unless args.length.zero?
-      to_a.my_each { |item| memo = yield(memo, item) }
-      return memo
-    end
-    if args.length == 2
-      memo = args[0]
-      sym = args[1]
-      0.upto(to_a.length - 1) do |i|
-        memo = memo.send(sym, self[i])
-      end
-      my_each { |item| memo = memo.send(sym, item) }
-      memo
-    elsif (args.length == 1) && (args[0].is_a? Symbol)
-      sym = args[0]
-      memo = self[0]
+    if block_given? && args.length.zero?
+      memo = to_a[0]
       1.upto(to_a.length - 1) do |i|
-        memo = memo.send(sym, self[i])
+        memo = yield(memo, to_a[i])
       end
-      memo
+    elsif block_given? && (args.length == 1)
+      memo = args[0]
+      to_a.my_each { |item| memo = yield(memo, item) }
+    elsif !block_given? && args.length == 2
+      memo = args[0]
+      to_a.my_each { |item| memo = memo.send(args[1], item) }
+    elsif (args.length == 1) && (args[0].is_a? Symbol)
+      memo = to_a[0]
+      1.upto(to_a.length - 1) do |i|
+        memo = memo.send(args[0], to_a[i])
+      end
     end
+    memo
   end
 end
+# rubocop: enable Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity
 
 def multiply_els(ary)
   ary.my_inject(:*)
