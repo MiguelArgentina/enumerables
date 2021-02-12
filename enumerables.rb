@@ -22,7 +22,7 @@ module Enumerable
     end
     self
   end
-  
+
   def my_select()
       return to_enum unless block_given?
 
@@ -57,4 +57,16 @@ module Enumerable
     end
   end
 
+  def my_count?(param = nil)
+    acc = 0
+    if param.nil? && block_given?
+      my_each { |item| acc += 1 if yield item }
+    elsif !param.nil? && !block_given?
+      my_each { |item| acc += 1 if item == param }
+    elsif param.nil? && !block_given?
+      my_each { |_item| acc += 1 }
+    end
+    acc
+  end
+  
 end
