@@ -43,14 +43,16 @@ module Enumerable
   end
 
   def my_any?(param = nil)
-    return my_select { |n| false }.size.positive? unless block_given?
+    return my_select { |item| false }.size.positive? unless block_given?
 
     # Checking Class
-    return my_select { |item| item.is_a? param }.size.positive? if param.is_a? Class
+    return my_select { |item| return true if [item.class, item.class.superclass].include?(param) }
     # Checking Regexp
-    return my_select { |item| param.match? item }.size.positive? if param.is_a? Regexp
+    return my_select { |item| return true if param.match(item) }
     # Checking Matches
-    return my_select { |item| param === item }.size.positive? unless param.nil?
+    return my_select { |item| return true if item == param }
+
+    my_select(param).size.positive?
   end
 
   def my_none?(param = nil)
