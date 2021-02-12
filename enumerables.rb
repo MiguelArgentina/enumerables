@@ -31,47 +31,47 @@ module Enumerable
       ary_aux
   end
 
-  def my_all(isEmpty = nil)
+  def my_all(param = nil)
     if block_given?
       to_a.my_each { |item| return false if yield(item) == false }
     else
-      case isEmpty
+      case param
       when nil
         to_a.my_each { |item| return false if item == false || item.nil? }
       when Class
-        to_a.my_each { |item| return false unless [item.class, item.class.superclass].include?(isEmpty) }
+        to_a.my_each { |item| return false unless [item.class, item.class.superclass].include?(param) }
       when Regexp
-        to_a.my_each { |item| return false unless isEmpty.match(item) }
+        to_a.my_each { |item| return false unless param.match(item) }
       else
-        to_a.my_each { |item| return false if item != isEmpty }
+        to_a.my_each { |item| return false if item != param }
       end
     end
     true
   end
 
-  def my_any(isEmpty = nil)
+  def my_any(param = nil)
     if block_given?
       to_a.my_each { |item| return true if yield(item) }
     else
-      case isEmpty
+      case param
       when nil
         to_a.my_each { |item| return true if item }
       when Class
-        to_a.my_each { |item| return true if [item.class, item.class.superclass].include?(isEmpty) }
+        to_a.my_each { |item| return true if [item.class, item.class.superclass].include?(param) }
       when Regexp
-        to_a.my_each { |item| return true if isEmpty.match(item) }
+        to_a.my_each { |item| return true if param.match(item) }
       else
-        to_a.my_each { |item| return true if item == isEmpty }
+        to_a.my_each { |item| return true if item == param }
       end
     end
     false
   end
 
-  def my_none(isEmpty = nil)
+  def my_none(param = nil)
     if block_given?
       !my_any(&Proc.new)
     else
-      !my_any(isEmpty)
+      !my_any(param)
     end
   end
 
