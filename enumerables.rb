@@ -22,6 +22,13 @@ module Enumerable
     end
     self
   end
-
   
+  def my_select()
+      return to_enum unless block_given?
+
+      ary_aux = []
+      my_each { |item| ary_aux << item if yield item }
+      ary_aux
+    end
+
 end
