@@ -114,7 +114,7 @@ module Enumerable
   end
 end
 
-# rubocop: enable Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity
+# rubocop: enable Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity, Style/CaseEquality
 
 def multiply_els(ary)
   ary.my_inject(:*)
