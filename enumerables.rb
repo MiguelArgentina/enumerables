@@ -24,11 +24,11 @@ module Enumerable
   end
 
   def my_select()
-      return to_enum unless block_given?
+    return to_enum unless block_given?
 
-      ary_aux = []
-      my_each { |item| ary_aux << item if yield item }
-      ary_aux
+    ary_aux = []
+    my_each { |item| ary_aux << item if yield item }
+    ary_aux
   end
 
   def my_all(isEmpty = nil)
@@ -87,9 +87,9 @@ module Enumerable
     acc
   end
 
-
   def my_map(proc = nil)
     return to_enum(:my_map) unless block_given? || !proc.nil?
+
     array = []
     if proc.nil?
       to_a.my_each { |item| array.append(yield(item)) }
@@ -132,7 +132,6 @@ module Enumerable
     end
   end
 end
-
 
 def multiply_els(ary)
   ary.my_inject(:*)
