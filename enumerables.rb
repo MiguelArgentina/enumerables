@@ -13,7 +13,7 @@ module Enumerable
   end
 
   def my_each_with_index
-    if block.given?
+    if block_given?
       0.upto (arr.length - 1) do |i|
         yield(to_a[i], i)
       end
@@ -32,8 +32,8 @@ module Enumerable
   end
 
   def my_all(isEmpty = nil)
-    if block.given?
-      to_a.my_each { |item| if yield(item)? : return true : return false }
+    if block_given?
+      to_a.my_each { |item| return false if yield(item) == false }
     else
       case isEmpty
       when nil
@@ -50,8 +50,8 @@ module Enumerable
   end
 
   def my_any(isEmpty = nil)
-    if block.given?
-      to_a.my_each { |item| if yield(item)? : return true : return false }
+    if block_given?
+      to_a.my_each { |item| return true if yield(item) }
     else
       case isEmpty
       when nil
@@ -68,7 +68,7 @@ module Enumerable
   end
 
   def my_none(isEmpty = nil)
-    if block.given?
+    if block_given?
       !my_any(&Proc.new)
     else
       !my_any(isEmpty)
@@ -89,7 +89,7 @@ module Enumerable
 
 
   def my_map(proc = nil)
-    return to_enum(:my_map) unless block.given? || !proc.nil?
+    return to_enum(:my_map) unless block_given? || !proc.nil?
     array = []
     if proc.nil?
       to_a.my_each { |item| array.append(yield(item)) }
