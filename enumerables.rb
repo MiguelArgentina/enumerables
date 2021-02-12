@@ -3,26 +3,32 @@
 module Enumerable
   def my_each()
     return to_a.to_enum unless block_given?
+
     0.upto(to_a.length - 1) do |i|
       yield to_a[i]
     end
     to_a
   end
+
   def my_each_with_index
     return to_enum(:my_each_with_index) unless block_given?
+
     if block_given?
-      0.upto (arr.length - 1) do |i|
+      0.upto(arr.length - 1) do |i|
         yield(to_a[i], i)
       end
     end
     self
   end
+
   def my_select()
     return to_enum unless block_given?
+
     ary_aux = []
     my_each { |item| ary_aux << item if yield item }
     ary_aux
   end
+
   def my_all(param = nil)
     if block_given?
       to_a.my_each { |item| return false if yield(item) == false }
@@ -40,6 +46,7 @@ module Enumerable
     end
     true
   end
+
   def my_any(param = nil)
     if block_given?
       to_a.my_each { |item| return true if yield(item) }
@@ -57,6 +64,7 @@ module Enumerable
     end
     false
   end
+
   def my_none(param = nil)
     if block_given?
       !my_any(&Proc.new)
@@ -64,6 +72,7 @@ module Enumerable
       !my_any(param)
     end
   end
+
   def my_count(param = nil)
     acc = 0
     if param.nil? && block_given?
@@ -75,6 +84,7 @@ module Enumerable
     end
     acc
   end
+
   def my_map(proc = nil)
     return to_enum(:my_map) unless block_given? || !proc.nil?
 
@@ -86,11 +96,13 @@ module Enumerable
     end
     array
   end
+
   def my_inject(*args)
     memo = 0
     sym = nil
     if block_given?
       return nil unless args.length == 1
+
       memo = to_a[0] if args.length == 1
       my_each do |item|
         accumulator = yield(memo, item)
