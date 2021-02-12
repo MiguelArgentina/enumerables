@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # rubocop: disable Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity
 # Enumerable Methods
 module Enumerable
@@ -6,8 +8,7 @@ module Enumerable
 
     0.upto(to_a.length - 1) do |i|
       yield to_a[i]
-    end
-    self
+    end; self
   end
 
   def my_each_with_index
