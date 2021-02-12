@@ -87,7 +87,7 @@ module Enumerable
     acc
   end
 
-  
+
   def my_map(proc = nil)
     return to_enum(:my_map) unless block.given? || !proc.nil?
     array = []
@@ -98,5 +98,42 @@ module Enumerable
     end
     array
   end
-  
+
+  def my_inject(*args)
+    memo = 0
+    sym = nil
+    if block_given?
+      if args.length == 1
+        memo = to_a[0]
+      else
+        return nil
+      end
+      my_each do |item|
+        accumulator = yield(memo, item)
+      end
+      accumulator
+    end
+
+    if args.length == 2
+      memo = args[0]
+      sym = args[1]
+      0.upto(to_a.length - 1) do |i|
+        memo = memo.send(sym, self[i])
+      end
+      my_each { |item| memo = memo.send(sym, item) }
+      memo
+    elsif (args.length == 1) && (args[0].is_a? Symbol)
+      sym = args[0]
+      memo = self[0]
+      1.upto(to_a.length - 1) do |i|
+        memo = memo.send(sym, self[i])
+      end
+      memo
+    end
+  end
+end
+
+
+def multiply_els(ary)
+  ary.my_inject(:*)
 end
