@@ -1,15 +1,13 @@
-# frozen_string_literal: true
-
-# rubocop: disable Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity
 # Enumerable Methods
 module Enumerable
   def my_each
     return to_a.to_enum unless block_given?
 
+    i = 0
     0.upto(to_a.length - 1) do |i|
       yield to_a[i]
     end
-    to_a
+    self
   end
 
   def my_each_with_index
@@ -31,7 +29,7 @@ module Enumerable
     ary_aux
   end
 
-  def my_all(param = nil)
+  def my_all?(param = nil)
     if block_given?
       to_a.my_each { |item| return false if yield(item) == false }
     else
@@ -49,7 +47,7 @@ module Enumerable
     true
   end
 
-  def my_any(param = nil)
+  def my_any?(param = nil)
     if block_given?
       to_a.my_each { |item| return true if yield(item) }
     else
@@ -67,7 +65,7 @@ module Enumerable
     false
   end
 
-  def my_none(param = nil)
+  def my_none?(param = nil)
     if block_given?
       !my_any(&Proc.new)
     else
@@ -98,29 +96,17 @@ module Enumerable
     end
     array
   end
+  
+  def my_inject(memo = nil, sym = nil, &block)
+    #Preprocessing to catch Symbol or String arguments
+    memo = memo.to_sym if memo.is_a?(String) && !sym && !block
+    sym = sym.to_sym if sym.is_a?(String)
+    block, memo = memo.to_proc, nil if memo.is_a?(Symbol) && !sym
+    block = sym.to_proc if sym.is_a?(Symbol)
 
-  def my_inject(*args)
-    if block_given? && args.length.zero?
-      memo = to_a[0]
-      1.upto(to_a.length - 1) do |i|
-        memo = yield(memo, to_a[i])
-      end
-    elsif block_given? && (args.length == 1)
-      memo = args[0]
-      to_a.my_each { |item| memo = yield(memo, item) }
-    elsif !block_given? && args.length == 2
-      memo = args[0]
-      to_a.my_each { |item| memo = memo.send(args[1], item) }
-    elsif (args.length == 1) && (args[0].is_a? Symbol)
-      memo = to_a[0]
-      1.upto(to_a.length - 1) do |i|
-        memo = memo.send(args[0], to_a[i])
-      end
-    end
+    my_each { |item| memo = memo.nil? ? item : block.yield(memo, item) }
     memo
-  end
 end
-# rubocop: enable Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity
 
 def multiply_els(ary)
   ary.my_inject(:*)
