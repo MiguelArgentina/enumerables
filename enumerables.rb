@@ -14,7 +14,7 @@ module Enumerable
     return to_enum(:my_each_with_index) unless block_given?
 
     if block_given?
-      0.upto(length - 1) do |i|
+      0.upto(size - 1) do |i|
         yield(to_a[i], i)
       end
     end
@@ -67,9 +67,9 @@ module Enumerable
 
   def my_none?(param = nil)
     if block_given?
-      !my_any(&Proc.new)
+      !my_any?(&Proc.new)
     else
-      !my_any(param)
+      !my_any?(param)
     end
   end
 
