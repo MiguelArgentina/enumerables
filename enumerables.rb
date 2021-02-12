@@ -104,7 +104,6 @@ module Enumerable
   end
 
   def my_inject(memo = nil, sym = nil, &block)
-    # Preprocessing to catch Symbol or String arguments
     raise LocalJumpError, 'No block or initial acc given' if memo.nil? && sym.nil? && !block
 
     memo = memo.to_sym if memo.is_a?(String) && !sym && !block
@@ -114,7 +113,6 @@ module Enumerable
       memo = nil
     end
     block = sym.to_proc if sym.is_a?(Symbol)
-
     my_each { |item| memo = memo.nil? ? item : block.yield(memo, item) }
     memo
   end
