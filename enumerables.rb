@@ -130,5 +130,3 @@ end
 def multiply_els(ary)
   ary.my_inject(:*)
 end
-
-p(5..10).my_inject { |sum, n| sum + n }
