@@ -16,8 +16,7 @@ module Enumerable
       0.upto(size - 1) do |i|
         yield(to_a[i], i)
       end
-    end
-    self
+    end; self
   end
 
   def my_select
@@ -29,39 +28,33 @@ module Enumerable
   end
 
   def my_all?(param = nil)
-    if block_given?
-      to_a.my_each { |item| return false if yield(item) == false }
+    return to_a.my_each { |item| return false if yield(item) == false } unless block_given?
+
+    case param
+    when nil
+      to_a.my_each { |item| return false if item == false || item.nil? }
+    when Class
+      to_a.my_each { |item| return false unless [item.class, item.class.superclass].include?(param) }
+    when Regexp
+      to_a.my_each { |item| return false unless param.match(item) }
     else
-      case param
-      when nil
-        to_a.my_each { |item| return false if item == false || item.nil? }
-      when Class
-        to_a.my_each { |item| return false unless [item.class, item.class.superclass].include?(param) }
-      when Regexp
-        to_a.my_each { |item| return false unless param.match(item) }
-      else
-        to_a.my_each { |item| return false if item != param }
-      end
-    end
-    true
+      to_a.my_each { |item| return false if item != param }
+    end; true
   end
 
   def my_any?(param = nil)
-    if block_given?
-      to_a.my_each { |item| return true if yield(item) }
+    return to_a.my_each { |item| return true if yield(item) } unless block_given?
+
+    case param
+    when nil
+      to_a.my_each { |item| return true if item }
+    when Class
+      to_a.my_each { |item| return true if [item.class, item.class.superclass].include?(param) }
+    when Regexp
+      to_a.my_each { |item| return true if param.match(item) }
     else
-      case param
-      when nil
-        to_a.my_each { |item| return true if item }
-      when Class
-        to_a.my_each { |item| return true if [item.class, item.class.superclass].include?(param) }
-      when Regexp
-        to_a.my_each { |item| return true if param.match(item) }
-      else
-        to_a.my_each { |item| return true if item == param }
-      end
-    end
-    false
+      to_a.my_each { |item| return true if item == param }
+    end; false
   end
 
   def my_none?(param = nil)
@@ -75,8 +68,7 @@ module Enumerable
       my_each { |item| return false if param.match(item) }
     elsif !param.nil?
       my_each { |item| return false if item == param }
-    end
-    true
+    end; true
   end
 
   def my_count(param = nil)
@@ -104,6 +96,7 @@ module Enumerable
   end
 
   def my_inject(memo = nil, sym = nil, &block)
+    # Preprocessing to catch Symbol or String arguments
     raise LocalJumpError, 'No block or initial acc given' if memo.nil? && sym.nil? && !block
 
     memo = memo.to_sym if memo.is_a?(String) && !sym && !block
@@ -113,6 +106,7 @@ module Enumerable
       memo = nil
     end
     block = sym.to_proc if sym.is_a?(Symbol)
+
     my_each { |item| memo = memo.nil? ? item : block.yield(memo, item) }
     memo
   end
