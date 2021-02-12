@@ -1,9 +1,9 @@
+# rubocop: disable Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity
 # Enumerable Methods
 module Enumerable
   def my_each
     return to_a.to_enum unless block_given?
 
-    i = 0
     0.upto(to_a.length - 1) do |i|
       yield to_a[i]
     end
@@ -108,6 +108,8 @@ module Enumerable
     memo
   end
 end
+
+# rubocop: disable Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity
 
 def multiply_els(ary)
   ary.my_inject(:*)
