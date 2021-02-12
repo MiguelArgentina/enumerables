@@ -49,6 +49,24 @@ module Enumerable
     true
   end
 
+  def my_any(isEmpty = nil)
+    if block.given?
+      to_a.my_each { |item| if yield(item)? : return true : return false }
+    else
+      case isEmpty
+      when nil
+        to_a.my_each { |item| return true if item }
+      when Class
+        to_a.my_each { |item| if [item.class, item.class.superclass].include?(isEmpty)? : return true : return false }
+      when Regexp
+        to_a.my_each { |item| return true if isEmpty.match(item) }
+      else
+        to_a.my_each { |item| return true if item == isEmpty }
+      end
+    end
+    false
+  end
+
   def my_none(isEmpty = nil)
     if block.given?
       !my_any(&Proc.new)
@@ -57,7 +75,7 @@ module Enumerable
     end
   end
 
-  def my_count?(param = nil)
+  def my_count(param = nil)
     acc = 0
     if param.nil? && block_given?
       my_each { |item| acc += 1 if yield item }
@@ -67,6 +85,18 @@ module Enumerable
       my_each { |_item| acc += 1 }
     end
     acc
+  end
+
+  
+  def my_map(proc = nil)
+    return to_enum(:my_map) unless block.given? || !proc.nil?
+    array = []
+    if proc.nil?
+      to_a.my_each { |item| array.append(yield(item)) }
+    else
+      to_a.my_each { |item| array.append(proc.call(item)) }
+    end
+    array
   end
   
 end
