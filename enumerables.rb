@@ -101,13 +101,11 @@ module Enumerable
     memo = 0
     sym = nil
     if block_given?
-      return nil unless args.length == 1
+      return nil if args.length > 1
 
-      memo = to_a[0] if args.length == 1
-      my_each do |item|
-        accumulator = yield(memo, item)
-      end
-      accumulator
+      memo = to_a[0] unless args.length.zero?
+      to_a.my_each { |item| memo = yield(memo, item) }
+      return memo
     end
     if args.length == 2
       memo = args[0]
@@ -132,3 +130,5 @@ end
 def multiply_els(ary)
   ary.my_inject(:*)
 end
+
+p(5..10).my_inject { |sum, n| sum + n }
