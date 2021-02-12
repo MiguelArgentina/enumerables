@@ -12,4 +12,16 @@ module Enumerable
     to_a
   end
 
+  def my_each_with_index
+    if block.given?
+      0.upto (arr.length - 1) do |i|
+        yield(to_a[i], i)
+      end
+    else
+      return to_enum(:my_each_with_index)
+    end
+    self
+  end
+
+  
 end
