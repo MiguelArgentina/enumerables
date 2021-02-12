@@ -28,7 +28,7 @@ module Enumerable
   end
 
   def my_all?(param = nil)
-    return to_a.my_each { |item| return false if yield(item) == false } unless block_given?
+    return my_select { |item| return false if yield(item) == false } unless block_given?
 
     case param
     when nil
@@ -43,18 +43,14 @@ module Enumerable
   end
 
   def my_any?(param = nil)
-    return to_a.my_each { |item| return true if yield(item) } unless block_given?
+    return my_select { |n| false }.size.positive? unless block_given?
 
-    case param
-    when nil
-      to_a.my_each { |item| return true if item }
-    when Class
-      to_a.my_each { |item| return true if [item.class, item.class.superclass].include?(param) }
-    when Regexp
-      to_a.my_each { |item| return true if param.match(item) }
-    else
-      to_a.my_each { |item| return true if item == param }
-    end; false
+    # Checking Class
+    return my_select { |item| item.is_a? param }.size.positive? if param.is_a? Class
+    # Checking Regexp
+    return my_select { |item| param.match? item }.size.positive? if param.is_a? Regexp
+    # Checking Matches
+    return my_select { |item| param === item }.size.positive? unless param.nil?
   end
 
   def my_none?(param = nil)
