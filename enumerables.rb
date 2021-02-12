@@ -28,35 +28,35 @@ module Enumerable
   end
 
   def my_all?(param = nil)
-    return my_select { |item| return false if yield(item) == false } unless block_given?
-
-    case param
-    when nil
-      to_a.my_each { |item| return false if item == false || item.nil? }
-    when Class
+    if block_given?
+      to_a.my_each { |item| return false if yield(item) == false }
+      return true
+    elsif param.nil?
+      to_a.my_each { |item| return false if item.nil? || item == false }
+    elsif !param.nil? && (param.is_a? Class)
       to_a.my_each { |item| return false unless [item.class, item.class.superclass].include?(param) }
-    when Regexp
+    elsif !param.nil? && param.class == Regexp
       to_a.my_each { |item| return false unless param.match(item) }
     else
       to_a.my_each { |item| return false if item != param }
-    end; true
+    end
+    true
   end
 
   def my_any?(param = nil)
     if block_given?
-      to_a.my_each { |item| return false if yield(item) == false }
-      return true
+      to_a.my_each { |item| return true if yield(item) }
+      return false
+    elsif param.nil?
+      to_a.my_each { |item| return true if item }
+    elsif !param.nil? && (param.is_a? Class)
+      to_a.my_each { |item| return true if [item.class, item.class.superclass].include?(param) }
+    elsif !param.nil? && param.class == Regexp
+      to_a.my_each { |item| return true if param.match(item) }
+    else
+      to_a.my_each { |item| return true if item == param }
     end
-    # Checking Class
-    return my_select { |item| item.is_a? param }.size.positive? if param.is_a? Class
-    # Checking Regexp
-    return my_select { |item| param.match? item }.size.positive? if param.is_a? Regexp
-    # Checking Matches
-    return my_select { |item| param === item }.size.positive? unless param.nil?
-
-    to_a.my_each { |item| return false if item != param }
-
-    my_select(param).size.positive?
+    false
   end
 
   def my_none?(param = nil)
