@@ -52,8 +52,8 @@ module Enumerable
     # Checking Regexp
     return my_select { |item| param.match? item }.size.positive? if param.is_a? Regexp
     # Checking Matches
-    return my_select { |n| param === n }.size.positive? unless param.nil?
-    # Checking False values if no block and no Class, Regexp or Matches
+    return my_select { |item| param === item }.size.positive? unless param.nil?
+
     to_a.my_each { |item| return false if item != param }
 
     my_select(param).size.positive?
