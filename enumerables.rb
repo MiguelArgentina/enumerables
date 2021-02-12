@@ -1,4 +1,4 @@
-# rubocop: disable Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity, Style/CaseEquality
+# rubocop: disable Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity
 # Enumerable Methods
 module Enumerable
   def my_each
@@ -114,7 +114,7 @@ module Enumerable
   end
 end
 
-# rubocop: enable Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity, Style/CaseEquality
+# rubocop: enable Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity
 
 def multiply_els(ary)
   ary.my_inject(:*)
