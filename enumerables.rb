@@ -1,9 +1,8 @@
 # rubocop: disable Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity
 
 module Enumerable
-  def my_each()
+  def my_each
     return to_a.to_enum unless block_given?
-
     0.upto(to_a.length - 1) do |i|
       yield to_a[i]
     end
@@ -12,7 +11,6 @@ module Enumerable
 
   def my_each_with_index
     return to_enum(:my_each_with_index) unless block_given?
-
     if block_given?
       0.upto(arr.length - 1) do |i|
         yield(to_a[i], i)
@@ -21,7 +19,7 @@ module Enumerable
     self
   end
 
-  def my_select()
+  def my_select
     return to_enum unless block_given?
 
     ary_aux = []
@@ -87,7 +85,6 @@ module Enumerable
 
   def my_map(proc = nil)
     return to_enum(:my_map) unless block_given? || !proc.nil?
-
     array = []
     if proc.nil?
       to_a.my_each { |item| array.append(yield(item)) }
@@ -102,7 +99,6 @@ module Enumerable
     sym = nil
     if block_given?
       return nil if args.length > 1
-
       memo = to_a[0] unless args.length.zero?
       to_a.my_each { |item| memo = yield(memo, item) }
       return memo
@@ -125,7 +121,6 @@ module Enumerable
     end
   end
 end
-# rubocop: enable Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity
 
 def multiply_els(ary)
   ary.my_inject(:*)
