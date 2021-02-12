@@ -87,7 +87,7 @@ module Enumerable
 
   def my_map(proc = nil)
     return to_enum(:my_map) unless block_given? || !proc.nil?
-    
+
     array = []
     if proc.nil?
       to_a.my_each { |item| array.append(yield(item)) }
@@ -102,6 +102,7 @@ module Enumerable
     sym = nil
     if block_given?
       return nil if args.length > 1
+      
       memo = to_a[0] unless args.length.zero?
       to_a.my_each { |item| memo = yield(memo, item) }
       return memo
