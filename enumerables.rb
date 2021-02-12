@@ -48,11 +48,13 @@ module Enumerable
       return true
     end
     # Checking Class
-    return my_select { |item| return true if [item.class, item.class.superclass].include?(param) }
+    return my_select { |item| item.is_a? param }.size.positive? if param.is_a? Class
     # Checking Regexp
-    return my_select { |item| return true if param.match(item) }
+    return my_select { |item| param.match? item }.size.positive? if param.is_a? Regexp
     # Checking Matches
-    return my_select { |item| return true if item == param }
+    return my_select { |n| param === n }.size.positive? unless param.nil?
+    # Checking False values if no block and no Class, Regexp or Matches
+    to_a.my_each { |item| return false if item != param }
 
     my_select(param).size.positive?
   end
