@@ -106,6 +106,7 @@ module Enumerable
 
     my_each { |item| memo = memo.nil? ? item : block.yield(memo, item) }
     memo
+  end
 end
 
 def multiply_els(ary)
