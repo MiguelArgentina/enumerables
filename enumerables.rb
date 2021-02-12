@@ -13,12 +13,12 @@ module Enumerable
   end
 
   def my_each_with_index
+    return to_enum(:my_each_with_index) unless block_given?
+
     if block_given?
       0.upto (arr.length - 1) do |i|
         yield(to_a[i], i)
       end
-    else
-      return to_enum(:my_each_with_index)
     end
     self
   end
@@ -103,11 +103,10 @@ module Enumerable
     memo = 0
     sym = nil
     if block_given?
-      if args.length == 1
-        memo = to_a[0]
-      else
-        return nil
-      end
+      return nil unless args.length == 1
+
+      memo = to_a[0] if args.length == 1
+
       my_each do |item|
         accumulator = yield(memo, item)
       end
