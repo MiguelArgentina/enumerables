@@ -43,7 +43,7 @@ module Enumerable
       when Regexp
         to_a.my_each { |item| return false unless isEmpty.match(item) }
       else
-        to_a.my_each { |item| if item == isEmpty? : return true : return false }
+        to_a.my_each { |item| return false if item != isEmpty }
       end
     end
     true
