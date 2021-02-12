@@ -96,12 +96,15 @@ module Enumerable
     end
     array
   end
-  
+
   def my_inject(memo = nil, sym = nil, &block)
-    #Preprocessing to catch Symbol or String arguments
+    # Preprocessing to catch Symbol or String arguments
     memo = memo.to_sym if memo.is_a?(String) && !sym && !block
     sym = sym.to_sym if sym.is_a?(String)
-    block, memo = memo.to_proc, nil if memo.is_a?(Symbol) && !sym
+    if memo.is_a?(Symbol) && !sym
+      block = memo.to_proc
+      memo = nil
+    end
     block = sym.to_proc if sym.is_a?(Symbol)
 
     my_each { |item| memo = memo.nil? ? item : block.yield(memo, item) }
@@ -109,7 +112,7 @@ module Enumerable
   end
 end
 
-# rubocop: disable Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity
+# rubocop: enable Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity
 
 def multiply_els(ary)
   ary.my_inject(:*)
