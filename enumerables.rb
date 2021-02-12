@@ -66,11 +66,16 @@ module Enumerable
   end
 
   def my_none?(param = nil)
-    if block_given?
-      !my_any?(&Proc.new)
-    else
-      !my_any?(param)
+    if block_given? && param.nil?
+      my_each { |item| return false if yield item }
+    elsif !block_given? && param.nil?
+      my_each { |item| return false if item == true }
+    elsif !param.nil? && (param.is_a? Class)
+      my_each { |item| return false if item.instance_of?(param) }
+    elsif !param.nil?
+      my_each { |item| return false if item == param }
     end
+    true
   end
 
   def my_count(param = nil)
