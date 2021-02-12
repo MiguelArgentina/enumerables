@@ -3,6 +3,7 @@
 module Enumerable
   def my_each
     return to_a.to_enum unless block_given?
+
     0.upto(to_a.length - 1) do |i|
       yield to_a[i]
     end
@@ -11,6 +12,7 @@ module Enumerable
 
   def my_each_with_index
     return to_enum(:my_each_with_index) unless block_given?
+
     if block_given?
       0.upto(arr.length - 1) do |i|
         yield(to_a[i], i)
@@ -85,6 +87,7 @@ module Enumerable
 
   def my_map(proc = nil)
     return to_enum(:my_map) unless block_given? || !proc.nil?
+    
     array = []
     if proc.nil?
       to_a.my_each { |item| array.append(yield(item)) }
