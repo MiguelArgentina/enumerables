@@ -39,7 +39,7 @@ module Enumerable
       when nil
         to_a.my_each { |item| return false if item == false || item.nil? }
       when Class
-        to_a.my_each { |item| if [item.class, item.class.superclass].include(isEmpty)? : return true : return false }
+        to_a.my_each { |item| if [item.class, item.class.superclass].include?(isEmpty) : return true : return false }
       when Regexp
         to_a.my_each { |item| return false unless isEmpty.match(item) }
       else
@@ -57,7 +57,7 @@ module Enumerable
       when nil
         to_a.my_each { |item| return true if item }
       when Class
-        to_a.my_each { |item| if [item.class, item.class.superclass].include(isEmpty)? : return true : return false }
+        to_a.my_each { |item| if [item.class, item.class.superclass].include?(isEmpty) : return true : return false }
       when Regexp
         to_a.my_each { |item| return true if isEmpty.match(item) }
       else
