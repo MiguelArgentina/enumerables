@@ -1,4 +1,3 @@
-
 # rubocop: disable Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity
 # Enumerable Methods
 module Enumerable
