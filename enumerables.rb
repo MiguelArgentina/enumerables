@@ -43,8 +43,10 @@ module Enumerable
   end
 
   def my_any?(param = nil)
-    return my_select { |item| false }.size.positive? unless block_given?
-
+    if block_given?
+      to_a.my_each { |item| return false if yield(item) == false }
+      return true
+    end
     # Checking Class
     return my_select { |item| return true if [item.class, item.class.superclass].include?(param) }
     # Checking Regexp
