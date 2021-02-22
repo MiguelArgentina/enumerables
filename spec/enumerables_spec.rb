@@ -7,6 +7,9 @@ describe Enumerable do
   let(:rng) {(1..5)}
   let(:block){|item| print item, "--"}
   let(:sym_ary) {[:foo, :bar, :sym]}
+  let(:words) { %w[ant bear cat] }
+  let(:numbers) { [1, 3.14, 42] }
+
   describe "#my_each" do
     it "Return an enumerator if no block is given" do
       expect(ary.my_each).to be_an(Enumerator)
@@ -69,6 +72,88 @@ describe Enumerable do
 
       it 'The method returns true if the block never returns false or nil after applying the block to every item' do
         expect(rng.my_all?(Numeric)).to eq(rng.all?(Numeric))
+      end
+    end
+  end
+
+  describe "#my_any?" do
+    let(:block) { proc { |word| word.length >= 3 } }
+    let(:false_collection) { [] }
+    let(:true_collection) { [nil, true, 99] }
+    context 'when no argument or block is given' do
+      it 'returns true if the block ever returns a value other than false or nil' do
+        expect(true_collection.my_any?).to be true_collection.any?
+      end
+
+      it 'returns false when one of the collection members are false or nil' do
+        expect(false_collection.my_any?).to be false_collection.any?
+      end
+    end
+
+    context 'when a class is passed as an argument' do
+      it 'returns true if at least one of the collection members is a member of such class' do
+        ary << 2
+        expect(ary.my_any?(Numeric)).to be ary.any?(Numeric)
+      end
+    end
+
+    context 'when a pattern is passed as an argument' do
+      it 'returns true if at least one of the collection members matches the regex' do
+        expect(ary.my_any?(/b/)).to be ary.any?(/b/)
+      end
+
+      it 'returns false if none of the collection members matches the regex' do
+        expect(ary.my_any?('d')).to be ary.any?('d')
+      end
+    end
+
+    context 'when a block is given' do
+      it 'returns true if the block ever returns a value other than false or nil' do
+        expect(words.my_any?(&block)).to be words.any?(&block)
+      end
+    end
+  end
+
+  describe "#my_none" do
+    let(:true_collection) { [nil, false] } 
+    let(:false_collection) { [nil, false, true] } 
+    let(:true_block) { proc { |word| word.length == 5 } }
+    let(:false_block) { proc { |word| word.length == 5 } }
+    
+
+    context 'when no argument or block is given' do
+      it 'return true only if none of the collection members is true' do
+        expect(true_collection.my_none?).to be true_collection.none?
+      end
+
+      it 'returns false if any of the collection members are truthy' do
+        expect(false_collection.my_none?).to be false_collection.none?
+      end
+    end
+
+    context 'when a class is passed as an argument' do
+      it 'returns true only if none of the collection members is a member of such class' do
+        expect(words.my_none?(Integer)).to be words.none?(Integer)
+      end
+
+      it 'returns false if any of the collection members are truthy' do
+        expect(numbers.my_none?(Float)).to be numbers.none?(Float)
+      end
+    end
+
+    context 'when a pattern is passed as an argument' do
+      it 'returns whether pattern === element for none of the collection members' do
+        expect(words.my_none?(/d/)).to be words.none?(/d/)
+      end
+    end
+
+    context 'when a block is given' do
+      it 'returns true if the block never returns true for all elements' do
+        expect(words.my_none?(&true_block)).to be words.none?(&block)
+      end
+
+      it 'returns false if the block returns true for any collection members' do
+        expect(words.my_none?(&false_block)).to be words.none?(&block)
       end
     end
   end
