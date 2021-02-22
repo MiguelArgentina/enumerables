@@ -4,8 +4,8 @@ module Enumerable
   def my_each
     return to_a.to_enum unless block_given?
 
-    0.upto(to_a.length - 1) do |i|
-      yield to_a[i]
+    0.upto(self.size - 1) do |i|
+      yield self.to_a[i]
     end; self
   end
 
