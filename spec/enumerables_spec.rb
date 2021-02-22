@@ -69,7 +69,7 @@ describe Enumerable do
       end
 
       it 'The method returns true if the block never returns false or nil after applying the block to every item' do
-        expect(rng.my_all? { :block_is_numeric }).to eq(rng.all? { :blblock_is_numericock })
+        expect(rng.my_all? { :block_is_numeric }).to eq(rng.all? { :block_is_numeric })
       end
 
       it 'The method returns true if the block never returns false or nil after applying the block to every item' do
