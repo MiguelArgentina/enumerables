@@ -227,4 +227,11 @@ describe Enumerable do
 
   end
 
+  describe "#multiply_els" do
+    it 'accepts an array as an argument and multiplies each element together using #my_inject' do
+      my_method = multiply_els [3, 5, 8]
+      expect(my_method).to eq 120
+    end
+  end
+
 end
