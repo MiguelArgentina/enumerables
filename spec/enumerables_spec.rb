@@ -12,15 +12,16 @@ describe Enumerable do
   let(:numbers) { [1, 3.14, 42] }
 
   describe '#my_each' do
+    let(:block) { proc { |item| print item, '--' } }
     it 'Return an enumerator if no block is given' do
       expect(ary.my_each).to be_an(Enumerator)
     end
     context 'when a block is given' do
       it 'Applies the block to every element of the array' do
-        expect(ary.my_each { :block }).to be(ary.each { :block })
+        expect(ary.my_each(&block)).to be(ary.each(&block))
       end
       it 'Applies the block to every element of the range' do
-        expect(rng.my_each { :block }).to be(rng.each { :block })
+        expect(rng.my_each(&block)).to be(rng.each(&block))
       end
     end
   end
