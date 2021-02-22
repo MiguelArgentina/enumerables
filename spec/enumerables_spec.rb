@@ -1,73 +1,76 @@
-require 'rspec'
-require './enumerables.rb'
+# frozen_string_literal: true
 
+require 'rspec'
+require './enumerables'
 
 describe Enumerable do
-  let(:ary) {%w[a b c]}
-  let(:rng) {(1..5)}
-  let(:block){|item| print item, "--"}
-  let(:sym_ary) {[:foo, :bar, :sym]}
+  let(:ary) { %w[a b c] }
+  let(:rng) { (1..5) }
+  let(:block) { |item| print item, '--' }
+  let(:sym_ary) { %i[foo bar sym] }
   let(:words) { %w[ant bear cat] }
   let(:numbers) { [1, 3.14, 42] }
 
-  describe "#my_each" do
-    it "Return an enumerator if no block is given" do
+  describe '#my_each' do
+    it 'Return an enumerator if no block is given' do
       expect(ary.my_each).to be_an(Enumerator)
     end
-    it "Applies the block to every element of the array" do
-      expect(ary.my_each{:block}).to be(ary.each{:block})
-    end
-    it "Applies the block to every element of the range" do
-      expect(rng.my_each{:block}).to be(rng.each{:block})
+    context 'when a block is given' do
+      it 'Applies the block to every element of the array' do
+        expect(ary.my_each { :block }).to be(ary.each { :block })
+      end
+      it 'Applies the block to every element of the range' do
+        expect(rng.my_each { :block }).to be(rng.each { :block })
+      end
     end
   end
 
-  describe "#my_each_with_index" do
-    let(:block){|item, index| print "Item: #{item}, Index: #{index}"}
+  describe '#my_each_with_index' do
+    let(:block) { |item, index| print "Item: #{item}, Index: #{index}" }
     it 'calls block with two arguments, the item and its index, for each item in enum' do
       expect(ary.my_each_with_index).to be_an(Enumerator)
     end
 
-    context "when a block is given" do
+    context 'when a block is given' do
       it 'returns the array after calling the given block once for each slement in self' do
-        expect(ary.my_each_with_index{:block}).to be(ary.each_with_index{:block})
+        expect(ary.my_each_with_index { :block }).to be(ary.each_with_index { :block })
       end
 
-      it "returns the array after calling the given block once for each slement in self::range" do
-        expect(rng.my_each_with_index{:block}).to be(rng.each_with_index{:block})
+      it 'returns the array after calling the given block once for each slement in self::range' do
+        expect(rng.my_each_with_index { :block }).to be(rng.each_with_index { :block })
       end
     end
   end
 
-  describe "#my_select" do
-    let(:block){|item| item > 3}
-    let(:sym_block){|item| item == :foo}
+  describe '#my_select' do
+    let(:block) { |item| item > 3 }
+    let(:sym_block) { |item| item == :foo }
     it 'returns an Enumerator if no block is given' do
       expect(rng.my_select).to be_an(Enumerator)
     end
 
-    context "when a block is given" do
+    context 'when a block is given' do
       it 'returns an array with all elements for which the given block returns a true value.' do
-        expect(rng.my_select{:block}).to eq(rng.select{:block})
+        expect(rng.my_select { :block }).to eq(rng.select { :block })
       end
 
       it 'returns an array with all elements for which the given block returns a true value.' do
-        expect(sym_ary.my_select{:sym_block}).to eq(sym_ary.select{:sym_block})
+        expect(sym_ary.my_select { :sym_block }).to eq(sym_ary.select { :sym_block })
       end
     end
   end
 
-  describe "#my_all?" do
-    let(:block){|item| item > 3}
-    let(:block_is_numeric){|item| item > 0}
+  describe '#my_all?' do
+    let(:block) { |item| item > 3 }
+    let(:block_is_numeric) { |item| item > 0 }
 
-    context "when a block is given" do
+    context 'when a block is given' do
       it 'The method returns true if the block never returns false or nil after applying the block to every item' do
-        expect(rng.my_all?{:block}).to eq(rng.all?{:block})
+        expect(rng.my_all? { :block }).to eq(rng.all? { :block })
       end
 
       it 'The method returns true if the block never returns false or nil after applying the block to every item' do
-        expect(rng.my_all?{:block_is_numeric}).to eq(rng.all?{:blblock_is_numericock})
+        expect(rng.my_all? { :block_is_numeric }).to eq(rng.all? { :blblock_is_numericock })
       end
 
       it 'The method returns true if the block never returns false or nil after applying the block to every item' do
@@ -76,7 +79,7 @@ describe Enumerable do
     end
   end
 
-  describe "#my_any?" do
+  describe '#my_any?' do
     let(:block) { proc { |word| word.length >= 3 } }
     let(:false_collection) { [] }
     let(:true_collection) { [nil, true, 99] }
@@ -114,12 +117,11 @@ describe Enumerable do
     end
   end
 
-  describe "#my_none" do
+  describe '#my_none' do
     let(:true_collection) { [nil, false] }
     let(:false_collection) { [nil, false, true] }
     let(:true_block) { proc { |word| word.length == 5 } }
     let(:false_block) { proc { |word| word.length == 5 } }
-
 
     context 'when no argument or block is given' do
       it 'return true only if none of the collection members is true' do
@@ -158,80 +160,78 @@ describe Enumerable do
     end
   end
 
-  describe "#my_count" do
-    let(:block){|item| item > 3}
+  describe '#my_count' do
+    let(:block) { |item| item > 3 }
     it 'It returns the number of items in the object if no param or block is given' do
       expect(rng.my_count).to eq(rng.count)
     end
-    context "when an argument is given" do
+    context 'when an argument is given' do
       it 'The method returns the count that argument appears in object' do
         expect(rng.my_count(2)).to eq(rng.count(2))
       end
     end
-    context "when a block is given" do
+    context 'when a block is given' do
       it 'The method returns the times the block yields true' do
-        expect(rng.my_count{:block}).to eq(rng.count{:block})
+        expect(rng.my_count { :block }).to eq(rng.count { :block })
       end
     end
   end
 
-  describe "#my_map" do
-    let(:block){|i| i * i}
-    let(:block2){"cat"}
-    context "When no block is given" do
+  describe '#my_map' do
+    let(:block) { |i| i * i }
+    let(:block2) { 'cat' }
+    context 'When no block is given' do
       it 'returns an Enumerator if no block is given' do
         expect(rng.my_map).to be_an(Enumerator)
       end
     end
-    context "when a block is given" do
+    context 'when a block is given' do
       it 'It returns a new array with the results of running block once for every element' do
-        expect(rng.my_map{:block}).to eq(rng.map{:block})
+        expect(rng.my_map { :block }).to eq(rng.map { :block })
       end
       it 'It returns a new array with the results of running block once for every element' do
-        expect(rng.my_map{:block2}).to eq(rng.map{:block2})
+        expect(rng.my_map { :block2 }).to eq(rng.map { :block2 })
       end
     end
   end
 
-  describe "#my_inject" do
-    let(:ary_case1){[1, :*]}
+  describe '#my_inject' do
+    let(:ary_case1) { [1, :*] }
     arg_case2 = :*
     initial_value = 1
-    let(:block_case3){ |product, n| product * n }
-    let(:block_case4){ proc { |memo, word| memo.length > word.length ? memo : word } }
-    context "When no block or argument is given" do
+    let(:block_case3) { |product, n| product * n }
+    let(:block_case4) { proc { |memo, word| memo.length > word.length ? memo : word } }
+    context 'When no block or argument is given' do
       it 'raises a LocalJumpError' do
-        expect{rng.my_inject}.to raise_error LocalJumpError
+        expect { rng.my_inject }.to raise_error LocalJumpError
       end
     end
-    context "When an initial value and a symbol are given" do
+    context 'When an initial value and a symbol are given' do
       it 'it returns the accumulation of the block result, accumulating from the initial value' do
         expect(rng.my_inject(ary_case1[0], ary_case1[1])).to eq(rng.inject(ary_case1[0], ary_case1[1]))
       end
     end
-    context "When only a symbol is given" do
+    context 'When only a symbol is given' do
       it 'it passes the symbol to the block and returns the accum' do
         expect(rng.my_inject(arg_case2)).to eq(rng.inject(arg_case2))
       end
     end
-    context "When an initial value and a block are given" do
+    context 'When an initial value and a block are given' do
       it 'it returns the accumulation of the block result, accumulating from the initial value' do
-        expect(rng.my_inject(initial_value){:block_case3}).to eq(rng.inject(initial_value){:block_case3})
+        expect(rng.my_inject(initial_value) { :block_case3 }).to eq(rng.inject(initial_value) { :block_case3 })
       end
     end
-    context "When only a block given" do
+    context 'When only a block given' do
       it 'the block is passed each element in the object' do
         expect(words.my_inject(&block_case4)).to eq(words.inject(&block_case4))
       end
     end
-
   end
 
-  describe "#multiply_els" do
+  describe '#multiply_els' do
     it 'accepts an array as an argument and multiplies each element together using #my_inject' do
       my_method = multiply_els [3, 5, 8]
       expect(my_method).to eq 120
     end
   end
-
 end

@@ -1,11 +1,13 @@
+# frozen_string_literal: true
+
 # rubocop: disable Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity
 # Enumerable Methods
 module Enumerable
   def my_each
     return to_a.to_enum unless block_given?
 
-    0.upto(self.size - 1) do |i|
-      yield self.to_a[i]
+    0.upto(size - 1) do |i|
+      yield to_a[i]
     end; self
   end
 
@@ -35,7 +37,7 @@ module Enumerable
       to_a.my_each { |item| return false if item.nil? || item == false }
     elsif !param.nil? && (param.is_a? Class)
       to_a.my_each { |item| return false unless [item.class, item.class.superclass].include?(param) }
-    elsif !param.nil? && param.class == Regexp
+    elsif !param.nil? && param.instance_of?(Regexp)
       to_a.my_each { |item| return false unless param.match(item) }
     else
       to_a.my_each { |item| return false if item != param }
@@ -51,7 +53,7 @@ module Enumerable
       to_a.my_each { |item| return true if item }
     elsif !param.nil? && (param.is_a? Class)
       to_a.my_each { |item| return true if [item.class, item.class.superclass].include?(param) }
-    elsif !param.nil? && param.class == Regexp
+    elsif !param.nil? && param.instance_of?(Regexp)
       to_a.my_each { |item| return true if param.match(item) }
     else
       to_a.my_each { |item| return true if item == param }
