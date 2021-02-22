@@ -115,11 +115,11 @@ describe Enumerable do
   end
 
   describe "#my_none" do
-    let(:true_collection) { [nil, false] } 
-    let(:false_collection) { [nil, false, true] } 
+    let(:true_collection) { [nil, false] }
+    let(:false_collection) { [nil, false, true] }
     let(:true_block) { proc { |word| word.length == 5 } }
     let(:false_block) { proc { |word| word.length == 5 } }
-    
+
 
     context 'when no argument or block is given' do
       it 'return true only if none of the collection members is true' do
@@ -149,13 +149,82 @@ describe Enumerable do
 
     context 'when a block is given' do
       it 'returns true if the block never returns true for all elements' do
-        expect(words.my_none?(&true_block)).to be words.none?(&block)
+        expect(words.my_none?(&true_block)).to be words.none?(&true_block)
       end
 
       it 'returns false if the block returns true for any collection members' do
-        expect(words.my_none?(&false_block)).to be words.none?(&block)
+        expect(words.my_none?(&false_block)).to be words.none?(&false_block)
       end
     end
+  end
+
+  describe "#my_count" do
+    let(:block){|item| item > 3}
+    it 'It returns the number of items in the object if no param or block is given' do
+      expect(rng.my_count).to eq(rng.count)
+    end
+    context "when an argument is given" do
+      it 'The method returns the count that argument appears in object' do
+        expect(rng.my_count(2)).to eq(rng.count(2))
+      end
+    end
+    context "when a block is given" do
+      it 'The method returns the times the block yields true' do
+        expect(rng.my_count{:block}).to eq(rng.count{:block})
+      end
+    end
+  end
+
+  describe "#my_map" do
+    let(:block){|i| i * i}
+    let(:block2){"cat"}
+    context "When no block is given" do
+      it 'returns an Enumerator if no block is given' do
+        expect(rng.my_map).to be_an(Enumerator)
+      end
+    end
+    context "when a block is given" do
+      it 'It returns a new array with the results of running block once for every element' do
+        expect(rng.my_map{:block}).to eq(rng.map{:block})
+      end
+      it 'It returns a new array with the results of running block once for every element' do
+        expect(rng.my_map{:block2}).to eq(rng.map{:block2})
+      end
+    end
+  end
+
+  describe "#my_inject" do
+    let(:ary_case1){[1, :*]}
+    arg_case2 = :*
+    initial_value = 1
+    let(:block_case3){ |product, n| product * n }
+    let(:block_case4){ proc { |memo, word| memo.length > word.length ? memo : word } }
+    context "When no block or argument is given" do
+      it 'raises a LocalJumpError' do
+        expect{rng.my_inject}.to raise_error LocalJumpError
+      end
+    end
+    context "When an initial value and a symbol are given" do
+      it 'it returns the accumulation of the block result, accumulating from the initial value' do
+        expect(rng.my_inject(ary_case1[0], ary_case1[1])).to eq(rng.inject(ary_case1[0], ary_case1[1]))
+      end
+    end
+    context "When only a symbol is given" do
+      it 'it passes the symbol to the block and returns the accum' do
+        expect(rng.my_inject(arg_case2)).to eq(rng.inject(arg_case2))
+      end
+    end
+    context "When an initial value and a block are given" do
+      it 'it returns the accumulation of the block result, accumulating from the initial value' do
+        expect(rng.my_inject(initial_value){:block_case3}).to eq(rng.inject(initial_value){:block_case3})
+      end
+    end
+    context "When only a block given" do
+      it 'the block is passed each element in the object' do
+        expect(words.my_inject(&block_case4)).to eq(words.inject(&block_case4))
+      end
+    end
+
   end
 
 end
