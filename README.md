@@ -24,7 +24,13 @@ This is an exercise to practice enumerables methods in Ruby.
 
 ### Usage
 
-* Run ruby enumerators.rb to see how the program sorts differet lists.
+* On the project's root folder run ```ruby enumerators.rb``` to see how the program sorts different lists.
+
+### Test cases usage
+
+* Open a New Terminal at the project's root folder
+* Run ```bundle install``` to install the gems
+* Run ```bundle exec rspec``` to run the test cases
 
 ## Authors
 
@@ -41,6 +47,15 @@ This is an exercise to practice enumerables methods in Ruby.
 
 * GitHub: [@MiguelArgentina](https://github.com/MiguelArgentina)
 * twitter - https://twitter.com/Qete_arg
+
+### Rspec Co-author: Ubong George Swift
+
+<img width="100" alt="Ubong George Swift Profile Picture" src="https://avatars.githubusercontent.com/u/71434803?s=460&u=4a7cdcadbddd9033a00d2f7eabc80ec302b1e259&v=4">
+
+
+* GitHub: [@george-swift](https://github.com/george-swift)
+* twitter - https://twitter.com/__pragmaticdev
+
 
 ## 🤝 Contributing
 
