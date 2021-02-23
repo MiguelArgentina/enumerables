@@ -87,6 +87,10 @@ describe Enumerable do
         expect(true_collection.my_any?).to be true_collection.any?
       end
 
+      it 'doesn´t return true when one of the collection members are false or nil' do
+        expect(false_collection.my_any?).not_to be true
+      end
+
       it 'returns false when one of the collection members are false or nil' do
         expect(false_collection.my_any?).to be false_collection.any?
       end
@@ -135,6 +139,10 @@ describe Enumerable do
     context 'when a class is passed as an argument' do
       it 'returns true only if none of the collection members is a member of such class' do
         expect(words.my_none?(Integer)).to be words.none?(Integer)
+      end
+
+      it 'doesn´t return true if any of the element in the collection is not a member of the class' do
+        expect(words.my_none?(Integer)).not_to be !words.none?(Integer)
       end
 
       it 'returns false if any of the collection members are truthy' do
