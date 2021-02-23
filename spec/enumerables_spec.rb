@@ -142,7 +142,7 @@ describe Enumerable do
       end
 
       it 'doesn´t return true if any of the element in the collection is not a member of the class' do
-        expect(words.my_none?(Integer)).not_to be !words.none?(Integer)
+        expect(words.my_none?(Integer)).not_to be words.any?(Integer)
       end
 
       it 'returns false if any of the collection members are truthy' do
