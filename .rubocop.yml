@@ -1,4 +1,4 @@
-# rubocop:disable Style/CaseEquality, Style/StringLiterals, Style/For
+# rubocop:disable Style/CaseEquality, Style/StringLiterals, Style/For, Style/BlockComments
 AllCops:
   Exclude:
     - "Guardfile"
